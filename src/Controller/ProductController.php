@@ -25,8 +25,7 @@ class ProductController extends AbstractController
     #[Route('/product', name: 'create_product', methods: ['POST'])]
     public function create(
         #[MapRequestPayload] CreateProductDto $createProductDto,
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $data = $this->productService->create($createProductDto);
 
         return $this->json([
@@ -59,8 +58,7 @@ class ProductController extends AbstractController
     public function update(
         #[MapRequestPayload] UpdateProductDto $dto,
         int $id,
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $data = $this->productService->update($dto, $id);
 
         return $this->json([
@@ -72,8 +70,7 @@ class ProductController extends AbstractController
     #[Route('/product/{id}', name: 'delete_specific_product', methods: ['DELETE'])]
     public function delete(
         int $id,
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $this->productService->remove($id);
 
         return $this->json([

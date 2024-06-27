@@ -2,4 +2,6 @@
 
 namespace App\DTO;
 
-class UpdateProductDto extends CreateProductDto {}
+class UpdateProductDto extends CreateProductDto
+{
+}

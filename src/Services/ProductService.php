@@ -23,8 +23,7 @@ class ProductService
         ProductRepository $productRepository,
         EntityManagerInterface $entityManagerInterface,
         SerializerInterface $serializer,
-    )
-    {
+    ) {
         $this->product = $product;
         $this->entityManagerInterface = $entityManagerInterface;
         $this->serializer = $serializer;

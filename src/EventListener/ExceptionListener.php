@@ -42,7 +42,7 @@ class ExceptionListener
                     ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
                 }
                 break;
-            
+
             default:
                 $response = new JsonResponse([
                     'message' => 'Internal Server Error',

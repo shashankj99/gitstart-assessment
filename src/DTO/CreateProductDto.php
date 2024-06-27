@@ -11,15 +11,13 @@ class CreateProductDto
         #[NotBlank()]
         #[Type('string')]
         public readonly string $name,
-
         #[NotBlank()]
         #[Type('float')]
         public readonly float $price,
-
         #[NotBlank()]
         #[Type('int')]
         public readonly int $quantity,
-
         public readonly ?string $description,
-    ) {}
+    ) {
+    }
 }

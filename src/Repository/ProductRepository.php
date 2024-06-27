@@ -21,8 +21,7 @@ class ProductRepository extends ServiceEntityRepository
         int $limit,
         string $order,
         ?string $search,
-    ): array
-    {
+    ): array {
         $queryBuilder = $this->createQueryBuilder('e');
 
         if ($search) {
