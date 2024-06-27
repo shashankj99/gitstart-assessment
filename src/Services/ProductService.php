@@ -8,6 +8,7 @@ use App\DTO\UpdateProductDto;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class ProductService
@@ -62,7 +63,13 @@ class ProductService
 
     public function show(int $id): Product
     {
-        return $this->productRepository->find($id);
+        $product = $this->productRepository->find($id);
+
+        if (!$product) {
+            throw new EntityNotFoundException("Unable to find the product with id $id");
+        }
+
+        return $product;
     }
 
     public function update(UpdateProductDto $dto, int $id): string
@@ -84,7 +91,7 @@ class ProductService
 
     public function remove(int $id): void
     {
-        $product = $this->productRepository->find($id);
+        $product = $this->show($id);
 
         $this->entityManagerInterface->remove($product);
         $this->entityManagerInterface->flush();
