@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\DTO\CreateProductDto;
 use App\DTO\Query\CommonRequestQuery;
+use App\DTO\UpdateProductDto;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -57,5 +58,35 @@ class ProductService
             $query->order,
             $query->search,
         );
+    }
+
+    public function show(int $id): Product
+    {
+        return $this->productRepository->find($id);
+    }
+
+    public function update(UpdateProductDto $dto, int $id): string
+    {
+        $product = $this->show($id);
+
+        $product->setName($dto->name);
+        $product->setPrice($dto->price);
+        $product->setQuantity($dto->quantity);
+
+        if ($dto->description) {
+            $product->setDescription($dto->description);
+        }
+
+        $this->entityManagerInterface->flush();
+
+        return $this->serializer->serialize($product, 'json');
+    }
+
+    public function remove(int $id): void
+    {
+        $product = $this->productRepository->find($id);
+
+        $this->entityManagerInterface->remove($product);
+        $this->entityManagerInterface->flush();
     }
 }
