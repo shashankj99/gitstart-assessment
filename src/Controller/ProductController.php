@@ -3,14 +3,15 @@
 namespace App\Controller;
 
 use App\DTO\CreateProductDto;
-use App\Entity\Product;
+use App\DTO\Query\CommonRequestQuery;
 use App\Services\ProductService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class ProductController extends AbstractController
 {
@@ -32,5 +33,15 @@ class ProductController extends AbstractController
             'message' => "Product created successfully",
             'data' => json_decode($data),
         ], 201);
+    }
+
+    #[Route('/product', name: 'app_fetch_products', methods: ['GET'])]
+    public function index(#[MapQueryString] ?CommonRequestQuery $query): JsonResponse
+    {
+        $data = $this->productService->index($query);
+
+        return $this->json([
+            'data' => $data,
+        ], 200);
     }
 }

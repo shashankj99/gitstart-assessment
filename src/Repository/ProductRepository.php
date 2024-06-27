@@ -16,28 +16,27 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    //    /**
-    //     * @return Product[] Returns an array of Product objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function fetchPaginatedProduct(
+        int $page,
+        int $limit,
+        string $order,
+        ?string $search,
+    ): array
+    {
+        $queryBuilder = $this->createQueryBuilder('e');
 
-    //    public function findOneBySomeField($value): ?Product
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($search) {
+            $queryBuilder->andWhere('e.name LIKE :search OR e.description LIKE :search')
+                ->setParameter('search', "%$search%");
+        }
+
+        $queryBuilder
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->orderBy('e.id', $order);
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->getResult();
+    }
 }
