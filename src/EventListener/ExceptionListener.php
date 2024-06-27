@@ -5,6 +5,7 @@ namespace App\EventListener;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 
@@ -43,9 +44,15 @@ class ExceptionListener
                 }
                 break;
 
+            case $exception instanceof HttpException:
+                $response = new JsonResponse([
+                    'message' => $exception->getMessage(),
+                ], $exception->getStatusCode() ?? JsonResponse::HTTP_BAD_REQUEST);
+                break;
+
             default:
                 $response = new JsonResponse([
-                    'message' => 'Internal Server Error',
+                    'message' => $exception->getMessage(),
                 ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
                 break;
         }
