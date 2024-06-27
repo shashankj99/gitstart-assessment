@@ -8,4 +8,7 @@ done
 
 php bin/console doctrine:migrations:migrate --no-interaction
 
+# generate key pair for jwt authentication
+php bin/console lexik:jwt:generate-keypair --overwrite
+
 exec "$@"
