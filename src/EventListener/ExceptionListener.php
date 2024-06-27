@@ -47,7 +47,7 @@ class ExceptionListener
             case $exception instanceof HttpException:
                 $response = new JsonResponse([
                     'message' => $exception->getMessage(),
-                ], $exception->getStatusCode() ?? JsonResponse::HTTP_BAD_REQUEST);
+                ], $exception->getStatusCode());
                 break;
 
             default:

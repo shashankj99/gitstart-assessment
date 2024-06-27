@@ -18,12 +18,11 @@ class AuthController extends AbstractController
     {
         $this->authService = $authService;
     }
-    
+
     #[Route('/register', name: 'app_auth')]
     public function register(
         #[MapRequestPayload] RegisterUserDto $dto,
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $this->authService->create($dto);
 
         return $this->json([

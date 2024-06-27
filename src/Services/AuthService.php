@@ -17,8 +17,7 @@ class AuthService
         User $user,
         EntityManagerInterface $entityManager,
         UserPasswordHasherInterface $hasher,
-    )
-    {
+    ) {
         $this->user = $user;
         $this->entityManager = $entityManager;
         $this->hasher = $hasher;
