@@ -6,10 +6,11 @@ use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
 
 class ExceptionListener
 {
-    public function onKernelException(ExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
 
@@ -21,18 +22,25 @@ class ExceptionListener
                 break;
 
             case $exception instanceof UnprocessableEntityHttpException:
-                $errors = [];
-                foreach ($exception->getPrevious()->getViolations() as $violation) {
-                    $errors[] = [
-                        'field' => $violation->getPropertyPath(),
-                        'message' => $violation->getMessage(),
-                    ];
-                }
+                $previous = $exception->getPrevious();
+                if ($previous instanceof ValidationFailedException) {
+                    $errors = [];
+                    foreach ($previous->getViolations() as $violation) {
+                        $errors[] = [
+                            'field' => $violation->getPropertyPath(),
+                            'message' => $violation->getMessage(),
+                        ];
+                    }
 
-                $response = new JsonResponse([
-                    'message' => 'Unprocessable Entity',
-                    'errors' => $errors,
-                ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+                    $response = new JsonResponse([
+                        'message' => 'Unprocessable Entity',
+                        'errors' => $errors,
+                    ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+                } else {
+                    $response = new JsonResponse([
+                        'message' => $exception->getMessage(),
+                    ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+                }
                 break;
             
             default:
