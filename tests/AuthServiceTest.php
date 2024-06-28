@@ -30,7 +30,7 @@ class AuthServiceTest extends KernelTestCase
             $this->entityManager,
             $this->hasher,
         );
-    
+
         $this->createMock(UserRepository::class);
     }
 
