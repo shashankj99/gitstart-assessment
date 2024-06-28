@@ -67,7 +67,8 @@
         ],
         "phpstan": "phpstan analyse",
         "phpcs": "phpcs",
-        "phpcbf": "phpcbf"
+        "phpcbf": "phpcbf",
+        "test-docker": "docker exec -it gitstart-assessment-app-1 php bin/phpunit"
     },
     "conflict": {
         "symfony/symfony": "*"

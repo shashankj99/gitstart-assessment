@@ -104,7 +104,7 @@ class ProductControllerTest extends WebTestCase
     public function testUpdateProductSuccessfully(): void
     {
         $data = [
-            'name' => 'Updated Product',
+            'name' => 'Test Product',
             'price' => 150,
             'quantity' => 20,
             'description' => 'An updated test product'
