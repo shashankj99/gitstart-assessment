@@ -12,6 +12,8 @@ php bin/console doctrine:database:create --env=test
 
 php bin/console doctrine:migrations:migrate --env=test --no-interaction
 
+mkdir -p config/jwt
+
 # generate key pair for jwt authentication
 openssl genrsa -out config/jwt/private.pem
 openssl rsa -in config/jwt/private.pem -pubout > config/jwt/public.pem
