@@ -2,32 +2,28 @@
 
 namespace App\Tests;
 
-use App\DTO\RegisterUserDto;
-use App\Services\AuthService;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class AuthControllerTest extends WebTestCase
 {
-    private AuthService $authService;
-
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->authService = $this->createMock(AuthService::class);
     }
 
     public function testRegisterUserSuccessfully(): void
     {
-        $dto = new RegisterUserDto('test@example.com', 'test_password');
-
-        $this->authService->expects($this->once())
-            ->method('create')
-            ->with($dto);
-
         $client = static::createClient();
-        $container = $client->getContainer();
-        $container->set(AuthService::class, $this->authService);
+        
+        $entityManager = $this->getContainer()->get('doctrine')->getManager();
+        $userRepository = $entityManager->getRepository(User::class);
+        $user = $userRepository->findOneBy(['email' => 'test@example.com']);
+
+        if ($user) {
+            $entityManager->remove($user);
+            $entityManager->flush();
+        }
 
         $client->request('POST', '/api/register', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
             'email' => 'test@example.com',
@@ -44,8 +40,6 @@ class AuthControllerTest extends WebTestCase
     public function testRegisterUserValidationErrors(): void
     {
         $client = static::createClient();
-        $container = $client->getContainer();
-        $container->set(AuthService::class, $this->authService);
 
         $client->request('POST', '/api/register', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
             'first_name' => 'something',
@@ -72,4 +66,3 @@ class AuthControllerTest extends WebTestCase
         );
     }
 }
-
