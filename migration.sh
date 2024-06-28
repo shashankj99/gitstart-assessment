@@ -8,11 +8,12 @@ done
 
 php bin/console doctrine:migrations:migrate --no-interaction
 
-# generate key pair for jwt authentication
-php bin/console lexik:jwt:generate-keypair --overwrite --no-interaction
-
 php bin/console doctrine:database:create --env=test
 
 php bin/console doctrine:migrations:migrate --env=test --no-interaction
+
+# generate key pair for jwt authentication
+openssl genrsa -out config/jwt/private.pem
+openssl rsa -in config/jwt/private.pem -pubout > config/jwt/public.pem
 
 exec "$@"

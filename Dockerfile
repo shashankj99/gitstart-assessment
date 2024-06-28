@@ -14,6 +14,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-scripts --no-autoloader
 
+RUN mkdir -p config/jwt \
+    && chown -R www-data:www-data config/jwt
+
 COPY migration.sh /usr/local/bin/migration.sh
 
 RUN chmod +x /usr/local/bin/migration.sh
