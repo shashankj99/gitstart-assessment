@@ -3,13 +3,14 @@
 namespace App\Tests;
 
 use App\Entity\Product;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductControllerTest extends WebTestCase
 {
-    private $client;
-    private $token;
+    private KernelBrowser $client;
+    private string $token;
 
     protected function setUp(): void
     {

@@ -167,7 +167,10 @@ class ProductServiceTest extends KernelTestCase
 
         $result = $this->service->update($dto, $productId);
 
-        $this->assertEquals('{"name":"updated product","price":20,"quantity":30,"description":"updated description"}', $result);
+        $this->assertEquals(
+            '{"name":"updated product","price":20,"quantity":30,"description":"updated description"}',
+            $result,
+        );
     }
 
     public function testUpdateProductNotFound(): void

@@ -15,7 +15,7 @@ class AuthControllerTest extends WebTestCase
     public function testRegisterUserSuccessfully(): void
     {
         $client = static::createClient();
-        
+
         $entityManager = $this->getContainer()->get('doctrine')->getManager();
         $userRepository = $entityManager->getRepository(User::class);
         $user = $userRepository->findOneBy(['email' => 'test@example.com']);
